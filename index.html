@@ -34,7 +34,8 @@
             font-size: 1.3em;
             margin-top: 15px;
             max-width: 500px;
-            animation: fadeIn 5s ease forwards;
+            opacity: 0;
+            transition: opacity 1s ease;
         }
 
         @keyframes fadeIn {
@@ -54,34 +55,49 @@
             width: 25px;
             height: 25px;
             background: radial-gradient(circle at 30% 30%, #ffb6c1, #ff69b4);
-            border-radius: 50% 50% 50% 50%;
+            border-radius: 50%;
             opacity: 0.8;
-            animation: fall linear infinite;
+            animation: fall linear forwards;
         }
 
         @keyframes fall {
             0% {
-                transform: translateY(-10vh) rotate(0deg);
+                transform: translateY(0) scale(1) rotate(0deg);
             }
 
             100% {
-                transform: translateY(110vh) rotate(360deg);
+                transform: translateY(110vh) scale(0.7) rotate(360deg);
             }
+        }
+
+        .start-flower {
+            font-size: 100px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .start-flower:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
 
 <body>
-    <h1>Untuk Bunga 🌸</h1>
+    <div id="start" class="start-flower">🌸</div>
+    <h1 id="title" style="display:none;">Untuk Bunga 🌸</h1>
     <div class="message" id="message"></div>
 
     <!-- Audio -->
-    <audio id="bgm" loop autoplay>
+    <audio id="bgm" loop>
         <source src="./Audio WhatsApp 2025-08-11 pukul 23.33.15_f4675939.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        // Pesan romantis bergantian
+        const startBtn = document.getElementById('start');
+        const title = document.getElementById('title');
+        const msgEl = document.getElementById('message');
+        const audio = document.getElementById('bgm');
+
         const messages = [
             "Kamu adalah bunga terindah di taman hatiku 🌸",
             "Setiap hari terasa indah saat bersamamu 💖",
@@ -89,7 +105,17 @@
             "Kau adalah alasan senyumku setiap pagi ☀️"
         ];
         let index = 0;
-        const msgEl = document.getElementById('message');
+
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.top = '-20px';
+            petal.style.animationDuration = (4 + Math.random() * 3) + 's';
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), 7000);
+        }
+
         function showMessage() {
             msgEl.style.opacity = 0;
             setTimeout(() => {
@@ -98,24 +124,22 @@
                 index = (index + 1) % messages.length;
             }, 500);
         }
-        showMessage();
-        setInterval(showMessage, 4000);
 
-        // Efek kelopak bunga jatuh
-        function createPetal() {
-            const petal = document.createElement('div');
-            petal.classList.add('petal');
-            petal.style.left = Math.random() * 100 + 'vw';
-            petal.style.animationDuration = (5 + Math.random() * 5) + 's';
-            document.body.appendChild(petal);
-            setTimeout(() => petal.remove(), 10000);
-        }
-        setInterval(createPetal, 300);
+        startBtn.addEventListener('click', () => {
+            startBtn.style.display = 'none';
+            title.style.display = 'block';
+            audio.play();
 
-        // Autoplay fix untuk browser yang blokir
-        const audio = document.getElementById('bgm');
-        document.body.addEventListener('click', () => {
-            if (audio.paused) audio.play();
+            // Efek kelopak meledak dulu
+            for (let i = 0; i < 30; i++) {
+                setTimeout(createPetal, i * 100);
+            }
+            // Setelah itu kelopak jatuh terus menerus
+            setInterval(createPetal, 300);
+
+            // Tampilkan pesan bergantian
+            showMessage();
+            setInterval(showMessage, 4000);
         });
     </script>
 </body>
