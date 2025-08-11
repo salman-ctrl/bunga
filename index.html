@@ -50,23 +50,13 @@
             }
         }
 
-        .petal {
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            background: radial-gradient(circle at 30% 30%, #ffb6c1, #ff69b4);
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: fall linear forwards;
-        }
-
         @keyframes fall {
             0% {
-                transform: translateY(0) scale(1) rotate(0deg);
+                transform: translateY(0) rotate(0deg);
             }
 
             100% {
-                transform: translateY(110vh) scale(0.7) rotate(360deg);
+                transform: translateY(110vh) rotate(360deg);
             }
         }
 
@@ -102,18 +92,51 @@
             "Kamu adalah bunga terindah di taman hatiku 🌸",
             "Setiap hari terasa indah saat bersamamu 💖",
             "Senandung cintaku selalu untukmu 🎶",
-            "Kau adalah alasan senyumku setiap pagi ☀️"
+            "Kau adalah alasan senyumku setiap pagi ☀️",
+            "Cintaku padamu takkan pernah layu 🌹",
+            "Kamu adalah pelangi setelah hujan 🌈",
+            "Di setiap detak jantungku, ada namamu ❤️",
+            "Aku ingin menggenggammu selamanya 🤝",
+            "Hidupku indah karena ada kamu ✨",
+            "Kau adalah mimpi yang menjadi nyata 💍"
         ];
         let index = 0;
 
         function createPetal() {
-            const petal = document.createElement('div');
-            petal.classList.add('petal');
+            const petal = document.createElement('span');
+            petal.textContent = '🌸';
+            petal.style.position = 'absolute';
             petal.style.left = Math.random() * 100 + 'vw';
             petal.style.top = '-20px';
-            petal.style.animationDuration = (4 + Math.random() * 3) + 's';
+            petal.style.fontSize = (20 + Math.random() * 30) + 'px';
+            petal.style.opacity = Math.random() * 0.8 + 0.2;
+            petal.style.animation = `fall ${(4 + Math.random() * 3)}s linear forwards`;
             document.body.appendChild(petal);
             setTimeout(() => petal.remove(), 7000);
+        }
+
+        function explodePetals(count) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const petal = document.createElement('span');
+                    petal.textContent = '🌸';
+                    petal.style.position = 'absolute';
+                    petal.style.left = '50vw';
+                    petal.style.top = '50vh';
+                    petal.style.fontSize = (20 + Math.random() * 30) + 'px';
+                    petal.style.opacity = Math.random() * 0.8 + 0.2;
+                    const angle = Math.random() * 2 * Math.PI;
+                    const distance = Math.random() * 200 + 50;
+                    petal.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
+                    petal.style.transition = 'transform 1s ease, opacity 1.5s ease';
+                    document.body.appendChild(petal);
+                    setTimeout(() => {
+                        petal.style.transform += ' translateY(100vh)';
+                        petal.style.opacity = 0;
+                    }, 50);
+                    setTimeout(() => petal.remove(), 2000);
+                }, i * 30);
+            }
         }
 
         function showMessage() {
@@ -130,14 +153,9 @@
             title.style.display = 'block';
             audio.play();
 
-            // Efek kelopak meledak dulu
-            for (let i = 0; i < 30; i++) {
-                setTimeout(createPetal, i * 100);
-            }
-            // Setelah itu kelopak jatuh terus menerus
-            setInterval(createPetal, 300);
+            explodePetals(60); // Bunga meledak di awal
+            setInterval(createPetal, 300); // Setelah itu bunga jatuh terus
 
-            // Tampilkan pesan bergantian
             showMessage();
             setInterval(showMessage, 4000);
         });
