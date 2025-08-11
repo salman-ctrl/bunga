@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Untuk Bunga 🌸</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(to bottom right, #ffe6f0, #fff0f5);
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #d6336c;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4em;
+            margin: 0;
+            animation: fadeIn 3s ease forwards;
+        }
+
+        .message {
+            font-size: 1.3em;
+            margin-top: 15px;
+            max-width: 500px;
+            animation: fadeIn 5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .petal {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle at 30% 30%, #ffb6c1, #ff69b4);
+            border-radius: 50% 50% 50% 50%;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+            }
+
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Untuk Bunga 🌸</h1>
+    <div class="message" id="message"></div>
+
+    <!-- Audio -->
+    <audio id="bgm" loop autoplay>
+        <source src="./Audio WhatsApp 2025-08-11 pukul 23.33.15_f4675939.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Pesan romantis bergantian
+        const messages = [
+            "Kamu adalah bunga terindah di taman hatiku 🌸",
+            "Setiap hari terasa indah saat bersamamu 💖",
+            "Senandung cintaku selalu untukmu 🎶",
+            "Kau adalah alasan senyumku setiap pagi ☀️"
+        ];
+        let index = 0;
+        const msgEl = document.getElementById('message');
+        function showMessage() {
+            msgEl.style.opacity = 0;
+            setTimeout(() => {
+                msgEl.textContent = messages[index];
+                msgEl.style.opacity = 1;
+                index = (index + 1) % messages.length;
+            }, 500);
+        }
+        showMessage();
+        setInterval(showMessage, 4000);
+
+        // Efek kelopak bunga jatuh
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.animationDuration = (5 + Math.random() * 5) + 's';
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), 10000);
+        }
+        setInterval(createPetal, 300);
+
+        // Autoplay fix untuk browser yang blokir
+        const audio = document.getElementById('bgm');
+        document.body.addEventListener('click', () => {
+            if (audio.paused) audio.play();
+        });
+    </script>
+</body>
+
+</html>
